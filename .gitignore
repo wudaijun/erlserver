@@ -1,3 +1,5 @@
 *.swp
+*.dump
 /deps
+/ebin
 /logs

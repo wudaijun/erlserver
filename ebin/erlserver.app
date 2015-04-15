@@ -1,9 +1,0 @@
-{application,erlserver,
-             [{description,[]},
-              {vsn,"1"},
-              {registered,[]},
-              {applications,[kernel,stdlib]},
-              {mod,{erlserver_app,[]}},
-              {env,[]},
-              {modules,[agent,agent_server,client,erlserver_app,erlserver_sup,
-                        player,player_server,player_sup]}]}.
