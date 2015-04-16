@@ -7,6 +7,8 @@
 -export([start_link/4, init/4]).
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, code_change/3, terminate/2]).
+%% API Functions
+-export([send/2]).
 %% ppid is the pid of player process
 -record(state, {socket, transport, ppid}).
 
@@ -31,6 +33,10 @@ init({}) ->
 
 handle_call(_Req, _From, State) ->
 	{reply, ok, State}.
+
+handle_cast({send, Data}, #state{socket=Socket, transport=Transport}=State) ->
+	Transport:send(Socket, Data),
+	{noreply, State};
 
 handle_cast(_Msg, State) ->
 	{noreply, State}.
@@ -77,6 +83,11 @@ code_change(_OldVsn, State, _Extra) ->
 terminate(_Reason, _State) ->
 	io:format("---close agent.~n"),
 	ok.
+%% ==============================
+%% API Functions
+%% ==============================
+send(AgendPid, Data) ->
+	gen_server:cast(AgendPid, {send, Data}).
 
 %% ==============================
 %% Private Functions

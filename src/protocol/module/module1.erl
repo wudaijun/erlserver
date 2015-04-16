@@ -1,6 +1,11 @@
 -module(module1).
 
--export([cb1/1]).
+-export([save_name/1]).
 
-cb1(Data) ->
-	io:format("Call cb1 with data: ~p~n", [Data]).
+%% save data to db
+save_name(Data) ->
+	io:format("Call save_name with data: ~p~n", [Data]),
+	{ok, [Res]} = model:insert(<<"person">>, [{name, Data}]),
+	io:format("res from db: ~p~n", [Res]),
+	{Id} = bson:at('_id', Res),
+	Id.

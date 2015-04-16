@@ -5,7 +5,7 @@ OPTS	= -pa $(ENVPATH)
 all : compile
 
 
-deps :
+deps : config/rebar.config
 	$(REBAR) get-deps
 
 compile:

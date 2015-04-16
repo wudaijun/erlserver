@@ -27,7 +27,10 @@ handle_call(_Msg, _From, State) ->
 	{reply, ok, State}.
 
 handle_cast({packet, M, F, A}, State) ->
-	apply(M, F, [A]),
+	Res = apply(M, F, [A]),
+	AgentPid = State#state.agent_pid,
+	io:format("res to client: ~p~n", [Res]),
+	agent:send(AgentPid, Res),
 	{noreply, State};
 
 handle_cast(_Msg, State) ->
@@ -48,3 +51,4 @@ terminate(_Reason, _State) ->
 
 create(PlayerId, AgentPid) ->
 	player_sup:start_child([PlayerId, AgentPid]).
+
