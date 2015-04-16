@@ -14,6 +14,6 @@ start_link() ->
 
 init([]) ->
 	AgentServer = ?CHILD(agent_server, supervisor),
-	%PlayerServer = ?CHILD(player_server, supervisor),
+    PlayerServer = ?CHILD(player_server, supervisor),
 	RestartStrategy = {one_for_one, 0, 1},
-	{ok, {RestartStrategy, [AgentServer]}}.
+	{ok, {RestartStrategy, [AgentServer, PlayerServer]}}.

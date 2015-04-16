@@ -55,5 +55,8 @@ code_change(_OldVsn, State, _Extra) ->
 %% ========================
 %% Send API 
 %% ========================
+
+%% when login: Packet = <<0, PlayerId:8>>
+%% after login: Packet = <<MsgId:8, RemainData/bytes>>
 send(Packet) ->
 	gen_server:call(?MODULE, {send, Packet}).

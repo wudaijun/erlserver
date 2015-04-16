@@ -24,6 +24,6 @@ start_child([PlayerId, AgentPid]) ->
 %% Callbacks
 %% =============================
 init([]) ->
-	Childs = [?CHILD(erlserver, worker)],
+	Childs = [?CHILD(player, worker)],
 	Strategy = {simple_one_for_one, 0, 1},
 	{ok, {Strategy, Childs}}.

@@ -3,7 +3,7 @@
 -behaviour(gen_server).
 
 %% API
--export([start_link/2]).
+-export([start_link/2, create/2]).
 %% Callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, code_change/3, terminate/2]).
 
@@ -13,6 +13,7 @@
 %% API
 %% =========================
 start_link(PlayerId, AgentPid) ->
+	io:format("new player~n"),
 	gen_server:start_link(?MODULE, [PlayerId, AgentPid], []).
 
 
@@ -25,6 +26,10 @@ init([PlayerId, AgentPid]) ->
 handle_call(_Msg, _From, State) ->
 	{reply, ok, State}.
 
+handle_cast({packet, M, F, A}, State) ->
+	apply(M, F, [A]),
+	{noreply, State};
+
 handle_cast(_Msg, State) ->
 	{noreply, State}.
 
@@ -36,3 +41,10 @@ code_change(_OldVsn, State, _Extra) ->
 
 terminate(_Reason, _State) ->
 	ok.
+
+%% ========================
+%% API 
+%% ========================
+
+create(PlayerId, AgentPid) ->
+	player_sup:start_child([PlayerId, AgentPid]).
