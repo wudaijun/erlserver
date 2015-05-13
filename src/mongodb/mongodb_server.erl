@@ -48,9 +48,9 @@ handle_call({find_one, Col, Query}, _From, State) ->
 
 handle_call({update, Col, Query, Data}, _From, State)->
   Conn = State#state.conn,
-  io:format("update arg: Conn:~p, Col:~p, Query:~p, Data:~p~n", [Conn, Col, Query, Data]),
+  lager:info("update arg: Conn:~p, Col:~p, Query:~p, Data:~p~n", [Conn, Col, Query, Data]),
   Res = mongo:update(Conn, Col, Query, Data),
-  io:format("update res: ~p~n", [Res]),
+  lager:info("update res: ~p~n", [Res]),
   {reply, {ok, Res}, State};
 
 handle_call(_Req, _From, State) ->

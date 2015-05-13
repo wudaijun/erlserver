@@ -11,7 +11,7 @@ collection() -> ?MODULE.
 % 从数据库加载数据到进程字典中
 init(PlayerId) ->
   {ok, Res} = model:find_one(collection(), {'_id', PlayerId}),
-  io:format("model_task init: ~p~n", [Res]),
+  lager:info("model_task init: ~p~n", [Res]),
   case Res of
     {} -> % 初始化
       model:insert(collection(), {'_id', PlayerId, tasks, []});
@@ -27,7 +27,7 @@ init(PlayerId) ->
 
 % 进程字典中的数据落地
 list_change(PlayerId, Data) ->
-  io:format("model_task list_change: ~p~n", [Data]),
+  lager:info("model_task list_change: ~p~n", [Data]),
   {NewData, UpData, DelData} = Data,
   % 处理新增数据
   lists:foreach(fun(NewTask) -> 

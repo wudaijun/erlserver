@@ -13,7 +13,7 @@
 %% API
 %% =========================
 start_link(PlayerId, AgentPid) ->
-	io:format("new player~n"),
+	lager:info("new player~n"),
 	gen_server:start_link(?MODULE, [PlayerId, AgentPid], []).
 
 
@@ -29,7 +29,7 @@ handle_call(_Msg, _From, State) ->
 handle_cast({packet, M, F, A}, State) ->
 	Res = apply(M, F, [A]),
 	AgentPid = State#state.agent_pid,
-	io:format("res to client: ~p~n", [Res]),
+	lager:info("res to client: ~p~n", [Res]),
 	agent:send(AgentPid, Res),
 	{noreply, State};
 

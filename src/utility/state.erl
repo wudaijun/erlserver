@@ -85,7 +85,7 @@ insert(Name, Key, Value) ->
         false ->
           put({Name, ?KEY_LIST}, [{Key, ?STATE_NEW}|KeyStateList]);
         _ ->
-          io:format("record {~p ~p} already exist~n", [Name, Key]),
+          lager:info("record {~p ~p} already exist~n", [Name, Key]),
           undefined % 新添加数据已存在
       end
   end,
@@ -105,7 +105,7 @@ insert(Name, Key, Value, init) ->
         false ->
           put({Name, ?KEY_LIST}, [{Key, ?STATE_ORIGIN}|KeyStateList]);
         _ ->
-          io:format("record {~p ~p} already exist~n", [Name, Key]),
+          lager:info("record {~p ~p} already exist~n", [Name, Key]),
           undefined
       end
   end,
@@ -130,7 +130,7 @@ update(Name, Key, Value) ->
               put({Name, ?KEY_LIST}, [{Key, ?STATE_UPDATE}|NewList]),
               ok;
             ?STATE_DELETE->
-              io:format("update a deleted data: {~p ~p}", [Name, Key]);
+              lager:info("update a deleted data: {~p ~p}", [Name, Key]);
             _ -> 
               put({Name, Key}, Value),  % 更新数据
               ok   % UPDATE 和 NEW 状态不变
@@ -157,7 +157,7 @@ delete(Name, Key) ->
               put({Name, ?KEY_LIST}, [{Key, ?STATE_DELETE}|NewList]),
               add_to_delete_list(Name, query(Name, Key));
             ?STATE_DELETE ->
-              io:format("delete {~p ~p} twice~n", [Name, Key]);
+              lager:info("delete {~p ~p} twice~n", [Name, Key]);
             ?STATE_NEW -> % NEW状态还未存入数据库  直接删除状态记录和数据
               NewList = lists:delete(OldState, KeyStateList),
               put({Name, ?KEY_LIST}, NewList)
@@ -277,7 +277,7 @@ reset_single_change(Name) ->
 
 % === 测试使用 输出进程字典各项统计信息
 status(Name) ->
-  io:format("~n--- Key States ---~n"),
-  io:format("~p", [get({Name, ?KEY_LIST})]),
-  io:format("~n--- Delete Key ---~n"),
-  io:format("~p~n", [get({Name, ?KEY_DELETE})]).
+  lager:info("~n--- Key States ---~n"),
+  lager:info("~p", [get({Name, ?KEY_LIST})]),
+  lager:info("~n--- Delete Key ---~n"),
+  lager:info("~p~n", [get({Name, ?KEY_DELETE})]).

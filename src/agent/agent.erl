@@ -20,7 +20,7 @@ start_link(Ref, Socket, Transport, ProtoOpts) ->
 		proc_lib:start_link(?MODULE, init, [Ref, Socket, Transport, ProtoOpts]).
 
 init(Ref, Socket, Transport, _ProtoOpts) ->
-	io:format("---new agent.~n"),
+	lager:info("---new agent.~n"),
 	ok = proc_lib:init_ack({ok, self()}),
 	ok = ranch:accept_ack(Ref),
 	ok = Transport:setopts(Socket, [{active, once}]),
@@ -64,11 +64,11 @@ handle_info({tcp, Socket, Data}, #state{socket=Socket, transport=Transport, ppid
 	end;
 
 handle_info({tcp_closed, _Socket}, State) ->
-	io:format("Recv tcp_closed ~n"),
+	lager:info("Recv tcp_closed ~n"),
 	{stop, normal, State};
 
 handle_info({tcp_error, _, Reason}, State) ->
-	io:format("Recv tcp_error ~n"),
+	lager:info("Recv tcp_error ~n"),
 	{stop, Reason, State};
 
 handle_info(timeout, State) ->
@@ -81,7 +81,7 @@ code_change(_OldVsn, State, _Extra) ->
 	{ok, State}.
 
 terminate(_Reason, _State) ->
-	io:format("---close agent.~n"),
+	lager:info("---close agent.~n"),
 	ok.
 %% ==============================
 %% API Functions
@@ -93,6 +93,6 @@ send(AgendPid, Data) ->
 %% Private Functions
 %% ==============================
 login(Data) ->
-	io:format("player login: ~p~n", [Data]),
+	lager:info("player login: ~p~n", [Data]),
 	<<PlayerId:8, _/bytes>> = Data,
 	player:create(PlayerId, self()).

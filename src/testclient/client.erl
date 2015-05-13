@@ -40,7 +40,7 @@ handle_cast(_Msg, State) ->
 	{noreply, State}.
 
 handle_info({tcp, _Socket, Data}, State) ->
-	io:format("recv: ~p~n", [Data]),
+	lager:info("recv: ~p~n", [Data]),
 	{noreply, State};
 
 handle_info(_Info, State) ->
