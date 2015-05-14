@@ -5,8 +5,11 @@
 %% Callbacks
 -export([start/2, stop/1]).
 
+%% API
+-export([start/0]).
+
 start(_StartType, _StartArgs) ->
-  application:start(lager),
+  ok = lager:start(),
   case erlserver_sup:start_link() of
   	{ok, Pid} -> {ok, Pid};
   	Other -> {error, Other}
@@ -14,3 +17,9 @@ start(_StartType, _StartArgs) ->
 
 stop(_State) ->
 	ok.
+
+% ========================
+% API
+% ========================
+start() ->
+  ok = application:start(erlserver).

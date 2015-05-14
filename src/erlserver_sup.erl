@@ -10,10 +10,10 @@
 
 
 start_link() ->
-	supervisor:start_link({local, ?SERVER_NAME}, ?MODULE, []).
+  supervisor:start_link({local, ?SERVER_NAME}, ?MODULE, []).
 
 init([]) ->
-	AgentServer = ?CHILD(agent_server, supervisor),
-    PlayerServer = ?CHILD(player_server, supervisor),
-	RestartStrategy = {one_for_one, 0, 1},
-	{ok, {RestartStrategy, [AgentServer, PlayerServer]}}.
+  AgentServer = ?CHILD(agent_server, supervisor),
+  PlayerServer = ?CHILD(player_server, supervisor),
+  RestartStrategy = {one_for_one, 0, 1},
+  {ok, {RestartStrategy, [AgentServer, PlayerServer]}}.

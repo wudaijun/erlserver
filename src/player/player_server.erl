@@ -11,8 +11,10 @@ start_link() ->
 	supervisor:start_link({local, ?SERVER_NAME}, ?MODULE, []).
 
 init([]) ->
-	Database = <<"test">>,
-	PlayerChild = ?CHILD(player_sup, supervisor, []),
-	MongodbChild = ?CHILD(mongodb_server, worker, [Database]),
-	Strategy = {one_for_one, 0, 1},
-	{ok, {Strategy, [MongodbChild, PlayerChild]}}.
+  %{ok, Database} = application:get_env(mongodb_server, dbname),
+  Database = <<"test">>,
+  PlayerChild = ?CHILD(player_sup, supervisor, []),
+  PlayerManagerChild = ?CHILD(player_manager, worker, []),
+  MongodbChild = ?CHILD(mongodb_server, worker, [Database]),
+  Strategy = {one_for_one, 0, 1},
+  {ok, {Strategy, [MongodbChild, PlayerChild, PlayerManagerChild]}}.

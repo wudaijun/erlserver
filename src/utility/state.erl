@@ -217,7 +217,11 @@ update(Name, Value) ->
 -spec get_list_change(atom()) -> {list(), list(), list()}.
 get_list_change(Name) ->
   KeyStateList = get({Name, ?KEY_LIST}),
-  {NList, UList} = lists:foldl(fun({Key, State}, {NewList, UpdateList}) ->
+  case KeyStateList of
+    undefined ->
+      {[], [], []};
+    _ ->
+    {NList, UList} = lists:foldl(fun({Key, State}, {NewList, UpdateList}) ->
         case State of
           ?STATE_NEW ->
             NewNewList = [query(Name, Key)|NewList],
@@ -227,13 +231,15 @@ get_list_change(Name) ->
             {NewList, NewUpdateList};
           _ ->
             {NewList, UpdateList}
-        end
-    end,
+         end
+      end,
     {[],[]},
     KeyStateList),
-  case get({Name, ?KEY_DELETE}) of
-    undefined -> {NList, UList, []};
-    DList -> {NList, UList, DList}
+
+    case get({Name, ?KEY_DELETE}) of
+      undefined -> {NList, UList, []};
+      DList -> {NList, UList, DList}
+    end
   end.
 
 % 获取single model的变更数据

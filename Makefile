@@ -1,6 +1,7 @@
 REBAR 	= ./bin/rebar --config config/rebar.config
 ENVPATH = ebin/ deps/*/ebin
-OPTS	= -pa $(ENVPATH)
+CONFIG  = ./app.config
+OPTS	= -pa $(ENVPATH) -config $(CONFIG)
 
 all : compile
 
@@ -13,7 +14,7 @@ compile:
 
 run:
 	#epmd -daemon # 让epmd后台运行
-	erl $(OPTS) -run erlserver start
+	erl $(OPTS) -run erlserver_app start
 
 erl:
 	erl $(OPTS)
