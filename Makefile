@@ -7,7 +7,7 @@ all :
 	make compile
 	make gen
 
-deps : config/rebar.config
+deps : rebar.config
 	$(REBAR) get-deps
 
 compile:
