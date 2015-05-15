@@ -1,10 +1,11 @@
-REBAR 	= ./bin/rebar --config config/rebar.config
-ENVPATH = ebin/ deps/*/ebin
-CONFIG  = ./app.config
-OPTS	= -pa $(ENVPATH) -config $(CONFIG)
+REBAR 	= rebar --config rebar.config
+ENVPATH = apps/*/ebin/ apps/*/deps/*/ebin
+OPTS	= -pa $(ENVPATH)
+SERVER  = ./rel/erlserver/bin/erlserver
 
-all : compile
-
+all : 
+	make compile
+	make gen
 
 deps : config/rebar.config
 	$(REBAR) get-deps
@@ -12,21 +13,30 @@ deps : config/rebar.config
 compile:
 	$(REBAR) compile
 
+gen:
+	-mkdir rel
+	rm -rf rel/*
+	cp -r apps/erlserver/rel/* rel
+	$(REBAR) generate
+
 run:
-	#epmd -daemon # 让epmd后台运行
-	erl $(OPTS) -run erlserver_app start
+	$(SERVER) start
+
+attach:
+	$(SERVER) attach
+
+stop:
+	$(SERVER) stop	
 
 erl:
 	erl $(OPTS)
 
-# simple run
-srun:
-	erl $(OPTS) 
+rellog:
+	cat ./rel/erlserver/log/erlang.log.1
 
 clean:
 	$(REBAR) clean
+	rm -rf logs/*
 
-kill:
-	ps aux | grep bream | grep erlserver_app | awk '{print $$2}' | xargs kill -9
-
-
+cleang:
+	rm -rf logs/*

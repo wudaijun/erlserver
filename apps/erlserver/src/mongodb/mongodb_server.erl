@@ -32,6 +32,7 @@ update(Col, Query, Data) ->
 
 init([Database]) ->
   ok = application:start(bson),
+  ok = application:start(crypto),
   ok = application:start(mongodb),
   {ok, Conn} = mongo:connect(Database),
   {ok, #state{conn=Conn}}.

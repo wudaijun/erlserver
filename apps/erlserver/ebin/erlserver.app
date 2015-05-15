@@ -1,0 +1,12 @@
+{application,erlserver,
+             [{description,[]},
+              {vsn,"1"},
+              {registered,[]},
+              {applications,[kernel,stdlib]},
+              {mod,{erlserver_app,[]}},
+              {env,[]},
+              {modules,[agent,agent_server,client,controller,erlserver_app,
+                        erlserver_sup,login_case,model,model_task,module1,
+                        module2,module3,mongodb_server,msg_dispatcher,player,
+                        player_manager,player_model,player_server,player_sup,
+                        player_task,state]}]}.

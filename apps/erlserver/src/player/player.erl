@@ -1,3 +1,9 @@
+%%% =====================================
+%%% @author wudaijun
+%%% @doc Player主进程 负责主要业务逻辑的处理
+%%% @end
+%%% =====================================
+
 -module(player).
 
 -behaviour(gen_server).
@@ -48,7 +54,8 @@ handle_info(_Info, State) ->
 code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
 
-terminate(_Reason, _State) ->
+terminate(_Reason, State) ->
+  player_model:save(State#state.player_id),
   ok.
 
 %% ========================
